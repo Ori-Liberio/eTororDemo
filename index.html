@@ -302,6 +302,17 @@
   mixpanel.init("9b02b5ecacff25c861555147cdf85995");
   // Register a site property for all events
   mixpanel.register({ site: "stockdash" });
+  // Generate a session ID (UUID v4 or fallback to timestamp)
+  function generateSessionId() {
+    if (window.crypto && window.crypto.randomUUID) {
+      return window.crypto.randomUUID();
+    } else {
+      // Fallback: timestamp + random
+      return 'sess-' + Date.now() + '-' + Math.floor(Math.random() * 1e9);
+    }
+  }
+  var SESSION_ID = generateSessionId();
+  mixpanel.register({ session_id: SESSION_ID });
   // Track a sample page view event
   mixpanel.track("Page Viewed");
   </script>  
