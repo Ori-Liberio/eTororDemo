@@ -164,8 +164,8 @@
               <span style="font-size:0.85rem;">${stock.range[0]} - ${stock.range[1]}</span>
             </td>
             <td>
-              <button class="btn btn-buy" onclick="alert('Buy ${stock.symbol} coming soon!')">Buy</button>
-              <button class="btn btn-outline" onclick="showDetails('${stock.symbol}')">Analyze</button>
+              <button class="btn btn-buy" onclick="trackBuy('${stock.symbol}');">Buy</button>
+              <button class="btn btn-outline" onclick="trackAnalyze('${stock.symbol}');">Analyze</button>
             </td>
           </tr>
         `;
@@ -199,12 +199,32 @@
           </div>
           <div class="chart-placeholder">[Chart Placeholder]</div>
           <div style="display:flex;gap:16px;justify-content:center;">
-            <button class="btn btn-buy" onclick="alert('Buy ${stock.symbol} coming soon!')">Buy</button>
-            <button class="btn btn-sell" onclick="alert('Sell ${stock.symbol} coming soon!')">Sell</button>
+            <button class="btn btn-buy" onclick="trackBuy('${stock.symbol}', true);">Buy</button>
+            <button class="btn btn-sell" onclick="trackSell('${stock.symbol}');">Sell</button>
           </div>
         </div>
       `;
       document.getElementById('main-content').innerHTML = html;
+    }
+
+    // Mixpanel event tracking functions
+    function trackBuy(symbol, fromDetails) {
+      if (window.mixpanel) {
+        mixpanel.track('Buy Clicked', { symbol: symbol, from: fromDetails ? 'details' : 'dashboard' });
+      }
+      alert('Buy ' + symbol + ' coming soon!');
+    }
+    function trackSell(symbol) {
+      if (window.mixpanel) {
+        mixpanel.track('Sell Clicked', { symbol: symbol });
+      }
+      alert('Sell ' + symbol + ' coming soon!');
+    }
+    function trackAnalyze(symbol) {
+      if (window.mixpanel) {
+        mixpanel.track('Analyze Clicked', { symbol: symbol });
+      }
+      showDetails(symbol);
     }
 
     // Initial load
@@ -243,7 +263,7 @@
   </script>
 
   <!--Mixpanel tag -->
- <script type="text/javascript">
+  <script type="text/javascript">
   (function (f, b) { if (!b.__SV) { 
       var e, g, i, h; window.mixpanel = b; b._i = []; b.init = function (e, f, c) 
       { function g(a, d) { var b = d.split("."); 2 == b.length && ((a = a[b[0]]), (d = b[1])); a[d] = function () 
