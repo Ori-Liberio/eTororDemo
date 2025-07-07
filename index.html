@@ -238,6 +238,22 @@
       alert('Deposit Funds coming soon!');
     }
 
+    // Generate a session ID (UUID v4 or fallback to timestamp)
+    function generateSessionId() {
+      if (window.crypto && window.crypto.randomUUID) {
+        return window.crypto.randomUUID();
+      } else {
+        // Fallback: timestamp + random
+        return 'sess-' + Date.now() + '-' + Math.floor(Math.random() * 1e9);
+      }
+    }
+    var SESSION_ID = generateSessionId();
+
+    // Register session_id as a super property in Mixpanel
+    if (window.mixpanel) {
+      mixpanel.register({ session_id: SESSION_ID });
+    }
+
     // Initial load
     showDashboard();
   </script>
