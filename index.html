@@ -55,12 +55,12 @@
     <aside class="sidebar">
       <div class="title">StockDash</div>
       <nav>
-        <a href="#" onclick="showDashboard();return false;">Home</a>
-        <a href="#" onclick="showDashboard();return false;">Watchlist</a>
-        <a href="#" onclick="alert('Portfolio page coming soon!');return false;">Portfolio</a>
-        <a href="#" onclick="alert('Discover page coming soon!');return false;">Discover</a>
+        <a href="#" onclick="trackMenu('Home'); showDashboard(); return false;">Home</a>
+        <a href="#" onclick="trackMenu('Watchlist'); showDashboard(); return false;">Watchlist</a>
+        <a href="#" onclick="trackMenu('Portfolio'); alert('Portfolio page coming soon!'); return false;">Portfolio</a>
+        <a href="#" onclick="trackMenu('Discover'); alert('Discover page coming soon!'); return false;">Discover</a>
       </nav>
-      <button class="deposit">Deposit Funds</button>
+      <button class="deposit" onclick="trackDepositFunds();">Deposit Funds</button>
     </aside>
     <main class="main" id="main-content">
       <!-- Content will be injected here -->
@@ -225,6 +225,17 @@
         mixpanel.track('Analyze Clicked', { symbol: symbol });
       }
       showDetails(symbol);
+    }
+    function trackMenu(menuName) {
+      if (window.mixpanel) {
+        mixpanel.track('Menu Clicked', { menu: menuName });
+      }
+    }
+    function trackDepositFunds() {
+      if (window.mixpanel) {
+        mixpanel.track('Deposit Funds Clicked');
+      }
+      alert('Deposit Funds coming soon!');
     }
 
     // Initial load
